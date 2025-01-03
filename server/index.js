@@ -1,8 +1,7 @@
 // server.js
 const fastify = require("fastify")({ logger: true });
-const { connectDB } = require("../src/config/connect.js");
 require("dotenv/config");
-
+const { connectDB } = require("./src/config/connect");
 // Register plugins
 fastify.register(require("@fastify/cors"), {
   origin: "*", // Adjust this to restrict allowed origins
@@ -16,7 +15,7 @@ fastify.get("/", async (request, reply) => {
 // Start the server
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI);
+    await connectDB(process.env.MONGODB_URI);
     await fastify.listen({ port: 8000 });
     console.log(`Server is running at http://localhost:8000`);
   } catch (err) {
