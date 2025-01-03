@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // Define the Base User schema
 const userSchema = new mongoose.Schema({
@@ -61,8 +61,4 @@ const DeliveryPartner = mongoose.model(
 );
 const Admin = mongoose.model("Admin", adminSchema);
 
-module.exports = {
-  Customer,
-  DeliveryPartner,
-  Admin,
-};
+export { Customer, DeliveryPartner, Admin };

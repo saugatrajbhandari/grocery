@@ -1,6 +1,8 @@
-require("dotenv/config");
-const fastifySession = require("@fastify/session");
-const MongoDBStore = require("connect-mongodb-session")(fastifySession);
+import "dotenv/config";
+import fastifySession from "@fastify/session";
+import connectMongoDBSession from "connect-mongodb-session";
+
+const MongoDBStore = connectMongoDBSession(fastifySession);
 
 const store = new MongoDBStore({
   uri: process.env.MONGODB_URI,
@@ -19,4 +21,4 @@ const authenticate = async (email, password) => {
   }
 };
 
-module.exports = { store, authenticate };
+export { store, authenticate };

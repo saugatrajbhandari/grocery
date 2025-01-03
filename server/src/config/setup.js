@@ -1,10 +1,12 @@
-const AdminJS = require("adminjs");
-const AdminJSFastify = require("@adminjs/fastify");
-const AdminJSMongoose = require("@adminjs/mongoose");
-const { Admin, Customer, DeliveryPartner } = require("../models/user");
-const Branch = require("../models/branch");
-const { store } = require("./config");
+import AdminJS from "adminjs";
+import AdminJSFastify from "@adminjs/fastify";
+import * as AdminJSMongoose from "@adminjs/mongoose";
+import { Admin, Customer, DeliveryPartner } from "../models/user.js";
+import { Branch } from "../models/branch.js";
+import { store } from "./config.js";
+import { authenticate } from "./config.js";
 
+// Register AdminJS Mongoose adapter
 AdminJS.registerAdapter(AdminJSMongoose);
 
 const admin = new AdminJS({
@@ -16,7 +18,6 @@ const admin = new AdminJS({
         filterProperties: ["phoneNumber", "role", "isActivated"],
       },
     },
-
     {
       resource: DeliveryPartner,
       options: {
@@ -24,7 +25,6 @@ const admin = new AdminJS({
         filterProperties: ["email", "role", "isActivated"],
       },
     },
-
     {
       resource: Admin,
       options: {
@@ -32,7 +32,6 @@ const admin = new AdminJS({
         filterProperties: ["email", "role", "isActivated"],
       },
     },
-
     {
       resource: Branch,
     },
@@ -40,17 +39,23 @@ const admin = new AdminJS({
   rootPath: "/admin",
 });
 
+// Build AdminJS authenticated router for Fastify
 const buildAdminRouter = async (app) => {
   await AdminJSFastify.buildAuthenticatedRouter(
     admin,
-    { authenticate, cookiePassword: "saugat", cookieName: "saugat" },
+    {
+      authenticate, // Ensure your authenticate function is correctly implemented
+      cookiePassword:
+        process.env.ADMIN_COOKIE_PASSWORD || "your_secure_cookie_password", // Use environment variable for cookie password
+      cookieName: process.env.ADMIN_COOKIE_NAME || "admin_session", // Use environment variable for cookie name
+    },
     app,
     {
       store: store,
       saveUninitialized: true,
-      secret: "saugat",
+      secret: process.env.ADMIN_SESSION_SECRET || "your_secure_session_secret", // Use environment variable for session secret
     }
   );
 };
 
-module.exports = { admin, buildAdminRouter };
+export { admin, buildAdminRouter };
