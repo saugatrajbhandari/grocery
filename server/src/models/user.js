@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // Define the Base User schema
 const userSchema = new mongoose.Schema({
@@ -29,7 +29,7 @@ const customerSchema = new mongoose.Schema({
 });
 
 // DeliveryPartner Schema
-const DeliveryPartnerSchema = new mongoose.Schema({
+const deliveryPartnerSchema = new mongoose.Schema({
   ...userSchema.obj,
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 6 },
@@ -46,6 +46,19 @@ const DeliveryPartnerSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model("User", userSchema);
+// admin Schema
+const adminSchema = new mongoose.Schema({
+  ...userSchema.obj,
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true, minlength: 6 },
+  role: { type: String, enum: ["Admin"], default: "Admin" },
+});
 
-module.exports = User;
+const Customer = mongoose.model("Customer", customerSchema);
+const DeliveryPartner = mongoose.model(
+  "DeliveryPartner",
+  deliveryPartnerSchema
+);
+const Admin = mongoose.model("Admin", adminSchema);
+
+export { Customer, DeliveryPartner, Admin };
