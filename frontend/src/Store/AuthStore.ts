@@ -1,5 +1,6 @@
 import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
+import {mmkvStorage} from './Storage';
 
 interface AuthStore {
   user: Record<string, any> | null;
@@ -20,7 +21,7 @@ const useAuthStore = create<AuthStore>()(
     }),
     {
       name: 'auth-storage', // Key for storage
-      storage: createJSONStorage(() => localStorage), // Use localStorage
+      storage: createJSONStorage(() => mmkvStorage), // Use localStorage
     },
   ),
 );

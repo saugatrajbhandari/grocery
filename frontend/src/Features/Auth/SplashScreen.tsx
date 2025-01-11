@@ -4,6 +4,9 @@ import {Colors} from '../../Utils/Constants';
 import {ScreenHeight, ScreenWidth} from '../../Utils/Scaling';
 import logo from '../../assets/images/splash_logo.jpeg';
 import GeoLocation from '@react-native-community/geolocation';
+import useAuthStore from '../../Store/AuthStore';
+import {tokenStorage} from '../../Store/Storage';
+import {resetAndNavigate} from '../../Utils/NavigationUtils';
 
 GeoLocation.setRNConfiguration({
   skipPermissionRequests: false,
@@ -13,10 +16,23 @@ GeoLocation.setRNConfiguration({
 });
 
 const SplashScreen = () => {
+  const {user, setUser} = useAuthStore();
+
+  const tokenCheck = async () => {
+    const accessToken = tokenStorage.getString('accessToken');
+
+    if (accessToken) {
+    } else {
+      resetAndNavigate('CustomerLogin');
+      return false;
+    }
+  };
+
   useEffect(() => {
     const fetchUserLocation = async () => {
       try {
         GeoLocation.requestAuthorization();
+        tokenCheck();
       } catch (error) {
         Alert.alert(
           'We need to show location service to give you better shopping experience',
