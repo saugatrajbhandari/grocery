@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'yoColo' do
+target 'frontend' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,7 +23,7 @@ target 'yoColo' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'yoColoTests' do
+  target 'frontendTests' do
     inherit! :complete
     # Pods for testing
   end
