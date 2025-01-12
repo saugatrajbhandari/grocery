@@ -1,4 +1,4 @@
-import {Alert, Animated, StyleSheet, View} from 'react-native';
+import {Animated, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import {
   GestureHandlerRootView,
@@ -12,9 +12,9 @@ import {resetAndNavigate} from '../Utils/NavigationUtils';
 const CustomerScreen = () => {
   const [gestureSequence, setGestureSequence] = useState<string[]>([]);
 
-  const handleGesture = ({nativeEvent}: any) => {
-    console.log('hello');
+  console.log(gestureSequence);
 
+  const handleGesture = ({nativeEvent}: any) => {
     if (nativeEvent.state === State.END) {
       const {translationX, translationY} = nativeEvent;
 
@@ -39,18 +39,18 @@ const CustomerScreen = () => {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <View style={styles.container}>
-        <CustomSafeAreaView>
-          <ProductSlider />
-          <PanGestureHandler onHandlerStateChange={handleGesture}>
+      <PanGestureHandler onHandlerStateChange={handleGesture}>
+        <View style={styles.container}>
+          <CustomSafeAreaView>
+            <ProductSlider />
             <Animated.ScrollView
               bounces={false}
               keyboardDismissMode={'on-drag'}
               keyboardShouldPersistTaps="handled"
               contentContainerStyle={styles.subContainer}></Animated.ScrollView>
-          </PanGestureHandler>
-        </CustomSafeAreaView>
-      </View>
+          </CustomSafeAreaView>
+        </View>
+      </PanGestureHandler>
     </GestureHandlerRootView>
   );
 };
