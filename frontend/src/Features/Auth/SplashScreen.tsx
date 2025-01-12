@@ -4,7 +4,7 @@ import {Colors} from '../../Utils/Constants';
 import {ScreenHeight, ScreenWidth} from '../../Utils/Scaling';
 import logo from '../../assets/images/splash_logo.jpeg';
 import GeoLocation from '@react-native-community/geolocation';
-import useAuthStore from '../../Store/AuthStore';
+// import useAuthStore from '../../Store/AuthStore';
 import {tokenStorage} from '../../Store/Storage';
 import {resetAndNavigate} from '../../Utils/NavigationUtils';
 
@@ -16,7 +16,7 @@ GeoLocation.setRNConfiguration({
 });
 
 const SplashScreen = () => {
-  const {user, setUser} = useAuthStore();
+  // const {user, setUser} = useAuthStore();
 
   const tokenCheck = async () => {
     const accessToken = tokenStorage.getString('accessToken');
