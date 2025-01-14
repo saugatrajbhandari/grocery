@@ -1,10 +1,9 @@
 import {Animated, Image, StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
   State,
-  TextInput,
 } from 'react-native-gesture-handler';
 
 import ProductSlider from '../Components/Login/ProductSlider';
@@ -12,11 +11,32 @@ import {resetAndNavigate} from '../Utils/NavigationUtils';
 import CustomText from '../Components/Ui/CustomText';
 import CustomInput from '../Components/Ui/CustomInput';
 import {Fonts} from '../Utils/Constants';
+import CustomButton from '../Components/Ui/CustomButton';
+import useKeyboardOffsetHeight from '../Hooks/useKeboardOffsetHeight';
 
 const CustomerScreen = () => {
   const [gestureSequence, setGestureSequence] = useState<string[]>([]);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
+  const keyboardOffsetHeight = useKeyboardOffsetHeight();
+
+  const animatedValue = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (keyboardOffsetHeight === 0) {
+      Animated.timing(animatedValue, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(animatedValue, {
+        toValue: -keyboardOffsetHeight * 0.84,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [keyboardOffsetHeight, animatedValue]);
 
   const handleGesture = ({nativeEvent}: any) => {
     if (nativeEvent.state === State.END) {
@@ -41,6 +61,8 @@ const CustomerScreen = () => {
     }
   };
 
+  const handleAuth = () => {};
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.container}>
@@ -51,7 +73,8 @@ const CustomerScreen = () => {
             bounces={false}
             keyboardDismissMode={'on-drag'}
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={styles.subContainer}>
+            contentContainerStyle={styles.subContainer}
+            style={{transform: [{translateY: animatedValue}]}}>
             <View style={styles.content}>
               <Image
                 source={require('../assets/images/logo.png')}
@@ -76,6 +99,13 @@ const CustomerScreen = () => {
                 left={<CustomText style={styles.phoneText}>+977</CustomText>}
                 inputMode="numeric"
                 placeholder="Enter mobile"
+              />
+
+              <CustomButton
+                title="Login"
+                onPress={handleAuth}
+                disabled={loading || phoneNumber.length !== 10}
+                loading={loading}
               />
             </View>
           </Animated.ScrollView>
