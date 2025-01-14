@@ -6,7 +6,7 @@ import React from 'react';
 import {RFValue} from 'react-native-responsive-fontsize';
 
 interface Props {
-  variant:
+  variant?:
     | 'h1'
     | 'h2'
     | 'h3'

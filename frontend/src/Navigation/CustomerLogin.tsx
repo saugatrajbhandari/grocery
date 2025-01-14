@@ -1,18 +1,22 @@
-import {Animated, Image, StyleSheet, Text, View} from 'react-native';
+import {Animated, Image, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
   State,
+  TextInput,
 } from 'react-native-gesture-handler';
 
 import ProductSlider from '../Components/Login/ProductSlider';
 import {resetAndNavigate} from '../Utils/NavigationUtils';
+import CustomText from '../Components/Ui/CustomText';
+import CustomInput from '../Components/Ui/CustomInput';
+import {Fonts} from '../Utils/Constants';
 
 const CustomerScreen = () => {
   const [gestureSequence, setGestureSequence] = useState<string[]>([]);
-
-  console.log(gestureSequence);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleGesture = ({nativeEvent}: any) => {
     if (nativeEvent.state === State.END) {
@@ -53,6 +57,26 @@ const CustomerScreen = () => {
                 source={require('../assets/images/logo.png')}
                 style={styles.logo}
               />
+
+              <CustomText variant="h2" fontFamily={Fonts.Bold}>
+                India's last minute app
+              </CustomText>
+
+              <CustomText
+                variant="h3"
+                style={styles.text}
+                fontFamily={Fonts.SemiBold}>
+                Login or Sign up
+              </CustomText>
+
+              <CustomInput
+                onChangeText={text => setPhoneNumber(text.slice(0, 10))}
+                onClear={() => setPhoneNumber('')}
+                value={phoneNumber}
+                left={<CustomText style={styles.phoneText}>+977</CustomText>}
+                inputMode="numeric"
+                placeholder="Enter mobile"
+              />
             </View>
           </Animated.ScrollView>
         </PanGestureHandler>
@@ -65,6 +89,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+
+  phoneText: {
+    marginLeft: 10,
+  },
+
+  text: {
+    marginTop: 2,
+    marginBottom: 25,
+    opacity: 0.8,
   },
 
   subContainer: {
